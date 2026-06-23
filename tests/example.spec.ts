@@ -16,3 +16,30 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+test('my first test', async ({page}) => {
+
+    await page.goto('https://google.com/ncr');
+
+
+    //Handle popup (like cookie consent) if it appears
+    const acceptButton = page.locator('button:has-text("Accept all")');
+    if (await acceptButton.isVisible()) {
+        await acceptButton.click();
+        console.log('Popup accepted');
+    }
+
+    await page.locator('textarea[name="q"]').first().fill('Playwright');
+
+    await page.keyboard.press('Enter');
+    
+    await page.locator('h3').first().waitFor();
+    //await page.waitForTimeout(2000);
+
+    //const results = await page.locator('#search .g').count();
+
+    const results = await page.locator('h3').allTextContents();
+
+    expect(results.length).toBeGreaterThan(0);
+ 
+});
